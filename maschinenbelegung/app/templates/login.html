@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block titel %}Anmelden · Maschinenbelegung{% endblock %}
+{% block inhalt %}
+<main>
+  <h1>Anmelden</h1>
+  <p class="unterzeile">Mit dem Heidelberg-Account, wie an jedem Werksrechner.</p>
+
+  <div class="offen">
+    Platzhalter: Die Kennung wird noch nicht geprüft, jede Eingabe wird angenommen.
+    Anbindung an den HD-Account steht aus (siehe <code>app/auth.py</code>).
+  </div>
+
+  <form class="satz" method="post" action="/login">
+    <input type="hidden" name="weiter" value="{{ weiter }}">
+    <div class="feld">
+      <label for="kennung">HD-Kennung</label>
+      <input type="text" id="kennung" name="kennung" placeholder="max.mustermann" required autofocus>
+    </div>
+    <div class="feld">
+      <label for="rolle">Rolle (nur zum Testen, kommt später aus der Gruppe)</label>
+      <select id="rolle" name="rolle">
+        <option value="azubi">Auszubildende/r</option>
+        <option value="ausbilder">Ausbilder/in</option>
+      </select>
+    </div>
+    <button type="submit">Anmelden</button>
+  </form>
+
+  <div class="offen" style="margin-top:20px">
+    Ausweis einscannen: technisch möglich, aber noch offen – Kartentyp, Freigabe der
+    UID und die Zuordnung Karte → HD-Account müssen mit Werkschutz und Betriebsrat
+    geklärt werden.
+  </div>
+</main>
+{% endblock %}

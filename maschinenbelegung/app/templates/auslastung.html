@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% set seite = 'auslastung' %}
+{% block titel %}Auslastung{% endblock %}
+{% block inhalt %}
+<main>
+  <h1>Auslastung</h1>
+  <p class="unterzeile">Gebuchte Zeit im Verhältnis zur Werkstattzeit
+    (Mo–Fr {{ cfg.BETRIEB_START.strftime('%H:%M') }}–{{ cfg.BETRIEB_ENDE.strftime('%H:%M') }}).</p>
+
+  <form class="filter" method="get" action="/auslastung">
+    <div class="feld">
+      <label for="von">Von</label>
+      <input type="date" id="von" name="von" value="{{ von }}">
+    </div>
+    <div class="feld">
+      <label for="bis">Bis</label>
+      <input type="date" id="bis" name="bis" value="{{ bis }}">
+    </div>
+    <button type="submit">Berechnen</button>
+  </form>
+
+  <table>
+    <tr><th>Maschine</th><th>Buchungen</th><th>Stunden</th><th style="width:45%">Quote</th></tr>
+    {% for z in zeilen %}
+    <tr>
+      <td class="nr">{{ z.maschine.id }}</td>
+      <td>{{ z.anzahl }}</td>
+      <td>{{ z.stunden }}</td>
+      <td><div class="balken"><i style="width: {{ [z.quote, 100] | min }}%"></i><b>{{ z.quote }} %</b></div></td>
+    </tr>
+    {% endfor %}
+  </table>
+</main>
+{% endblock %}

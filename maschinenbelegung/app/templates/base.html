@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titel %}Maschinenbelegung{% endblock %}</title>
+<link rel="stylesheet" href="/static/stil.css">
+</head>
+<body class="{% block koerper %}{% endblock %}">
+{% block kopf %}
+<header class="kopf">
+  <div class="marke">Maschinenbelegung <span>Ausbildungswerkstatt</span></div>
+  <nav>
+    <a href="/" class="{{ 'aktiv' if seite == 'buchen' }}">Buchen</a>
+    <a href="/buchungen" class="{{ 'aktiv' if seite == 'buchungen' }}">Buchungen</a>
+    <a href="/auslastung" class="{{ 'aktiv' if seite == 'auslastung' }}">Auslastung</a>
+    <a href="/tafel">Tafel</a>
+    <a href="/qr">QR-Codes</a>
+  </nav>
+  <div class="wer">
+    {% if benutzer %}{{ benutzer.name }} ({{ benutzer.rolle }}) · <a href="/logout">abmelden</a>
+    {% else %}<a href="/login">anmelden</a>{% endif %}
+  </div>
+</header>
+{% endblock %}
+{% block inhalt %}{% endblock %}
+</body>
+</html>

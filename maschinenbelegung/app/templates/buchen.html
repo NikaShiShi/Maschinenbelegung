@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% set seite = 'buchen' %}
+{% block titel %}Maschine buchen{% endblock %}
+{% block inhalt %}
+<main>
+  {% if ueber_qr and gewaehlt %}
+    <h1>{{ gewaehlt.bezeichnung }}</h1>
+    <p class="unterzeile">{{ gewaehlt.standort }} · über den QR-Code an der Maschine geöffnet</p>
+  {% else %}
+    <h1>Maschine buchen</h1>
+    <p class="unterzeile">Buchbar bis {{ max_ende.strftime('%d.%m.%Y') }}.</p>
+  {% endif %}
+
+  {% if fehler %}<div class="fehler">{{ fehler }}</div>{% endif %}
+
+  <form class="satz" method="post" action="/buchen">
+    <div class="feld">
+      <label for="maschine_id">Maschine</label>
+      <select id="maschine_id" name="maschine_id" required
+              onchange="location='/?maschine=' + this.value">
+        <option value="">– bitte wählen –</option>
+        <optgroup label="Drehen">
+          {% for m in drehen %}
+          <option value="{{ m.id }}" {% if gewaehlt and gewaehlt.id == m.id %}selected{% endif %}>
+            {{ m.id }} · {{ m.bezeichnung }}</option>
+          {% endfor %}
+        </optgroup>
+        <optgroup label="Fräsen">
+          {% for m in fraesen %}
+          <option value="{{ m.id }}" {% if gewaehlt and gewaehlt.id == m.id %}selected{% endif %}>
+            {{ m.id }} · {{ m.bezeichnung }}</option>
+          {% endfor %}
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="zweispaltig">
+      <div class="feld">
+        <label for="start">Von</label>
+        <input type="datetime-local" id="start" name="start" required
+               value="{{ werte.start or vorschlag_start.strftime('%Y-%m-%dT%H:%M') }}"
+               min="{{ jetzt.strftime('%Y-%m-%dT%H:%M') }}"
+               max="{{ max_ende.strftime('%Y-%m-%dT%H:%M') }}">
+      </div>
+      <div class="feld">
+        <label for="ende">Bis</label>
+        <input type="datetime-local" id="ende" name="ende" required
+               value="{{ werte.ende or vorschlag_ende.strftime('%Y-%m-%dT%H:%M') }}"
+               min="{{ jetzt.strftime('%Y-%m-%dT%H:%M') }}"
+               max="{{ max_ende.strftime('%Y-%m-%dT%H:%M') }}">
+      </div>
+    </div>
+
+    <div class="feld">
+      <label for="zweck">Verwendungszweck</label>
+      <select id="zweck" name="zweck" required>
+        {% for z in cfg.ZWECKE %}
+        <option value="{{ z }}" {% if werte.zweck == z %}selected{% endif %}>{{ z }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="feld">
+      <label for="bemerkung">Bemerkung (Bauteil, Auftrag, Lehrgangsnummer)</label>
+      <textarea id="bemerkung" name="bemerkung" rows="2">{{ werte.bemerkung or '' }}</textarea>
+    </div>
+
+    <button type="submit">Buchung speichern</button>
+  </form>
+
+  {% if gewaehlt %}
+    <h2>Nächste Belegungen an {{ gewaehlt.id }}</h2>
+    {% if naechste %}
+      <table>
+        <tr><th>Tag</th><th>Zeit</th><th>Wer</th><th>Zweck</th></tr>
+        {% for b in naechste %}
+        <tr>
+          <td>{{ b.start.strftime('%a %d.%m.') }}</td>
+          <td>{{ b.start.strftime('%H:%M') }}–{{ b.ende.strftime('%H:%M') }}</td>
+          <td>{{ b.benutzer_name }}</td>
+          <td>{{ b.zweck }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <div class="leer">Für die nächsten 14 Tage ist hier nichts eingetragen.</div>
+    {% endif %}
+  {% endif %}
+</main>
+{% endblock %}

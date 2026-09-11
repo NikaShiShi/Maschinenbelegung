@@ -1,0 +1,158 @@
+:root {
+  --grund:  #e9ebe8;
+  --flaeche:#ffffff;
+  --tinte:  #1c2126;
+  --leise:  #5d666b;
+  --linie:  #c6cbc6;
+  --frei:   #1c7a3e;
+  --belegt: #c0201f;
+  --bald:   #b07a00;
+  --akzent: #0b5fa5;
+  --schmal: "Roboto Condensed", "Arial Narrow", "Helvetica Neue Condensed", Arial, sans-serif;
+  --text:   "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--grund);
+  color: var(--tinte);
+  font-family: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+a { color: var(--akzent); }
+
+/* ---------------------------------------------------------------- Kopf -- */
+.kopf {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 14px 24px;
+  background: var(--flaeche);
+  border-bottom: 2px solid var(--tinte);
+}
+.marke {
+  font-family: var(--schmal);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+.marke span { color: var(--leise); font-weight: 400; }
+.kopf nav { display: flex; gap: 20px; flex-wrap: wrap; }
+.kopf nav a { text-decoration: none; color: var(--tinte); padding-bottom: 2px; }
+.kopf nav a:hover { border-bottom: 2px solid var(--akzent); }
+.kopf nav a.aktiv { border-bottom: 2px solid var(--tinte); font-weight: 600; }
+.wer { margin-left: auto; color: var(--leise); font-size: 14px; }
+
+main { max-width: 900px; margin: 0 auto; padding: 28px 24px 64px; }
+h1 { font-family: var(--schmal); font-size: 30px; margin: 0 0 4px; font-weight: 700; }
+h2 { font-family: var(--schmal); font-size: 20px; margin: 32px 0 10px; }
+.unterzeile { color: var(--leise); margin: 0 0 24px; }
+
+/* -------------------------------------------------------------- Hinweis - */
+.hinweis, .fehler, .offen {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-left: 5px solid var(--akzent);
+  background: var(--flaeche);
+}
+.fehler { border-left-color: var(--belegt); }
+.offen  { border-left-color: var(--bald); font-size: 14px; color: var(--leise); }
+
+/* ------------------------------------------------------------- Formular - */
+form.satz { background: var(--flaeche); padding: 22px 24px; border: 1px solid var(--linie); }
+.feld { margin-bottom: 18px; }
+.feld label { display: block; font-size: 14px; color: var(--leise); margin-bottom: 5px; }
+input[type=text], input[type=datetime-local], input[type=date], select, textarea {
+  width: 100%;
+  padding: 9px 10px;
+  font: inherit;
+  color: var(--tinte);
+  background: #fbfcfb;
+  border: 1px solid var(--linie);
+  border-radius: 0;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 3px solid var(--akzent);
+  outline-offset: 1px;
+}
+.zweispaltig { display: flex; gap: 18px; flex-wrap: wrap; }
+.zweispaltig > * { flex: 1 1 220px; }
+
+button, .knopf {
+  font: inherit;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 0;
+  background: var(--tinte);
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+button:hover { background: var(--akzent); }
+button.leise { background: none; color: var(--belegt); border: 1px solid var(--linie); padding: 5px 12px; font-weight: 400; }
+button.leise:hover { background: var(--belegt); color: #fff; }
+
+/* --------------------------------------------------------------- Listen - */
+table { width: 100%; border-collapse: collapse; background: var(--flaeche); }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--linie); }
+th { font-family: var(--schmal); font-size: 15px; letter-spacing: .02em; border-bottom: 2px solid var(--tinte); }
+td.nr { font-family: var(--schmal); font-weight: 700; }
+tr.weg td { color: var(--leise); text-decoration: line-through; }
+.filter { display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 18px; }
+.filter .feld { margin: 0; }
+.leer { padding: 40px 24px; background: var(--flaeche); border: 1px dashed var(--linie); color: var(--leise); }
+
+/* ----------------------------------------------------------- Auslastung - */
+.balken { background: #dfe2df; height: 20px; position: relative; min-width: 120px; }
+.balken i { display: block; height: 100%; background: var(--akzent); }
+.balken b { position: absolute; right: 6px; top: 0; font-size: 13px; line-height: 20px; font-weight: 600; }
+
+/* ---------------------------------------------------------------- Tafel - */
+body.tafel { background: #12161a; color: #fff; }
+.tafel-kopf {
+  display: flex; align-items: baseline; gap: 24px;
+  padding: 18px 32px; border-bottom: 1px solid #2b3238;
+}
+.tafel-kopf h1 { font-size: 28px; color: #fff; }
+.uhr { margin-left: auto; font-family: var(--schmal); font-size: 34px; font-weight: 700; }
+.gruppe { padding: 20px 32px 4px; }
+.gruppe > h2 {
+  font-size: 17px; color: #8b969e; margin: 0 0 12px;
+  border-bottom: 1px solid #2b3238; padding-bottom: 6px;
+}
+.raster { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.kachel {
+  background: var(--frei);
+  border-left: 10px solid rgba(0, 0, 0, .35);
+  padding: 12px 14px 14px;
+  min-height: 118px;
+  display: flex; flex-direction: column;
+}
+.kachel.ist-belegt { background: var(--belegt); }
+.kachel .nummer { font-family: var(--schmal); font-size: 40px; font-weight: 700; line-height: .95; }
+.kachel .lage   { font-size: 13px; opacity: .8; margin-bottom: auto; }
+.kachel .status { font-family: var(--schmal); font-size: 19px; font-weight: 700; }
+.kachel .detail { font-size: 13px; opacity: .9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tafel-fuss { padding: 14px 32px 28px; color: #8b969e; font-size: 14px; display: flex; gap: 28px; }
+
+/* --------------------------------------------------------------- QR-Blatt */
+.aufkleber-blatt { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.aufkleber { background: #fff; border: 2px solid var(--tinte); padding: 14px; text-align: center; }
+.aufkleber img { width: 100%; max-width: 190px; image-rendering: pixelated; }
+.aufkleber .nr { font-family: var(--schmal); font-size: 26px; font-weight: 700; }
+.aufkleber .zeile { font-size: 12px; color: var(--leise); }
+
+@media (max-width: 900px) { .raster { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .raster { grid-template-columns: repeat(2, 1fr); } .kopf { gap: 14px; } }
+@media print {
+  .kopf, .unterzeile { display: none; }
+  .aufkleber-blatt { grid-template-columns: repeat(3, 1fr); }
+}

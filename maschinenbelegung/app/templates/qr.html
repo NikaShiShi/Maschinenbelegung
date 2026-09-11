@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% set seite = 'qr' %}
+{% block titel %}QR-Codes{% endblock %}
+{% block inhalt %}
+<main>
+  <h1>QR-Codes für die Maschinen</h1>
+  <p class="unterzeile">Ein Aufkleber je Maschine, direkt am Bedienpult. Der Scan öffnet
+    das Buchungsformular mit bereits gewählter Maschine.</p>
+  <div class="offen">
+    Die Codes zeigen aktuell auf <code>{{ cfg.BASE_URL }}</code>. Vor dem Druck die
+    endgültige Adresse in <code>MB_BASE_URL</code> setzen, sonst müssen alle 24 Aufkleber neu.
+  </div>
+  <div class="aufkleber-blatt">
+    {% for m in maschinen %}
+    <div class="aufkleber">
+      <div class="nr">{{ m.id }}</div>
+      <img src="/qr/{{ m.id }}.png" alt="QR-Code {{ m.id }}">
+      <div class="zeile">{{ m.bezeichnung }}</div>
+      <div class="zeile">{{ m.standort }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}

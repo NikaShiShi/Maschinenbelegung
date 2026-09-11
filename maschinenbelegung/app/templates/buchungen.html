@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% set seite = 'buchungen' %}
+{% block titel %}Buchungen{% endblock %}
+{% block inhalt %}
+<main>
+  <h1>Buchungen</h1>
+  <p class="unterzeile">Alle Einträge der Werkstatt. Stornieren darf jeder seine eigenen,
+    Ausbilder auch fremde.</p>
+
+  {% if fehler %}<div class="fehler">{{ fehler }}</div>{% endif %}
+  {% if neu %}<div class="hinweis">Buchung gespeichert.</div>{% endif %}
+
+  <form class="filter" method="get" action="/buchungen">
+    <div class="feld">
+      <label for="maschine">Maschine</label>
+      <select id="maschine" name="maschine">
+        <option value="">alle</option>
+        {% for m in maschinen %}
+        <option value="{{ m.id }}" {% if maschine == m.id %}selected{% endif %}>{{ m.id }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="feld">
+      <label for="zeigen">Zeitraum</label>
+      <select id="zeigen" name="zeigen">
+        <option value="kommend" {% if zeigen == 'kommend' %}selected{% endif %}>ab jetzt</option>
+        <option value="verlauf" {% if zeigen == 'verlauf' %}selected{% endif %}>komplett</option>
+        <option value="alle" {% if zeigen == 'alle' %}selected{% endif %}>komplett inkl. storniert</option>
+      </select>
+    </div>
+    <div class="feld">
+      <label for="nur_meine">Auswahl</label>
+      <select id="nur_meine" name="nur_meine">
+        <option value="">alle Personen</option>
+        <option value="1" {% if nur_meine %}selected{% endif %}>nur meine</option>
+      </select>
+    </div>
+    <button type="submit">Anzeigen</button>
+  </form>
+
+  {% if liste %}
+  <table>
+    <tr>
+      <th>Maschine</th><th>Tag</th><th>Zeit</th><th>Wer</th>
+      <th>Zweck</th><th></th>
+    </tr>
+    {% for b in liste %}
+    <tr class="{{ 'weg' if b.storniert }}">
+      <td class="nr">{{ b.maschine_id }}</td>
+      <td>{{ b.start.strftime('%a %d.%m.%Y') }}</td>
+      <td>{{ b.start.strftime('%H:%M') }}–{{ b.ende.strftime('%H:%M') }}</td>
+      <td>{{ b.benutzer_name }}</td>
+      <td>{{ b.zweck }}{% if b.bemerkung %} · {{ b.bemerkung }}{% endif %}</td>
+      <td>
+        {% if not b.storniert and b.ende > jetzt and (b.benutzer_id == benutzer.id or benutzer.ist_ausbilder) %}
+        <form method="post" action="/buchungen/{{ b.id }}/storno"
+              onsubmit="return confirm('Buchung {{ b.maschine_id }} am {{ b.start.strftime('%d.%m. %H:%M') }} stornieren?')">
+          <button class="leise" type="submit">Stornieren</button>
+        </form>
+        {% elif b.storniert %}storniert{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <div class="leer">Keine Buchungen im gewählten Filter. <a href="/">Jetzt eine Maschine buchen.</a></div>
+  {% endif %}
+</main>
+{% endblock %}

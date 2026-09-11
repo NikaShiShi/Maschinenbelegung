@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% set seite = 'tafel' %}
+{% block titel %}Maschinentafel{% endblock %}
+{% block koerper %}tafel{% endblock %}
+{% block kopf %}
+<header class="tafel-kopf">
+  <h1>Maschinentafel · Ausbildungswerkstatt</h1>
+  <div class="uhr" id="uhr">{{ jetzt.strftime('%H:%M') }}</div>
+</header>
+{% endblock %}
+{% block inhalt %}
+{% for typ in ['Drehen', 'Fräsen'] %}
+<section class="gruppe">
+  <h2>{{ typ }}</h2>
+  <div class="raster">
+    {% for z in zeilen if z.maschine.typ == typ %}
+    <div class="kachel {{ 'ist-belegt' if z.belegt }}">
+      <div class="nummer">{{ z.maschine.id.split('-')[1] }}</div>
+      <div class="lage">{{ z.maschine.bezeichnung }}</div>
+      {% if z.belegt %}
+        <div class="status">bis {{ z.aktuell.ende.strftime('%H:%M') }}</div>
+        <div class="detail">{{ z.aktuell.benutzer_name }} · {{ z.aktuell.zweck }}</div>
+      {% else %}
+        <div class="status">frei</div>
+        <div class="detail">
+          {% if z.frei_bis %}bis {{ z.frei_bis.strftime('%H:%M') }}{% if z.frei_bis.date() != jetzt.date() %} am {{ z.frei_bis.strftime('%d.%m.') }}{% endif %}
+          {% else %}keine Buchung heute{% endif %}
+        </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+<div class="tafel-fuss">
+  <span>Buchen: QR-Code an der Maschine scannen</span>
+  <span>Stand {{ jetzt.strftime('%d.%m.%Y %H:%M') }}, aktualisiert sich alle {{ cfg.BOARD_REFRESH_SEK }} Sekunden</span>
+</div>
+
+<script>
+  setInterval(function () {
+    document.getElementById('uhr').textContent =
+      new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  }, 10000);
+  setTimeout(function () { location.reload(); }, {{ cfg.BOARD_REFRESH_SEK * 1000 }});
+</script>
+{% endblock %}
